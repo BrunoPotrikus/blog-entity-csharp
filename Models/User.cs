@@ -3,13 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlogEntity.Models
 {
-    [Table("User")]
+    //DataAnottation
+    //[Table("User")]
 
     public class User
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        //DataAnnotation
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public int Id { get; set; }
 
         public string Name { get; set; }
         public string Email { get; set; }
