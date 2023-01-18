@@ -1,5 +1,6 @@
 ﻿using BlogEntity.Data;
 using BlogEntity.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class Program
 {
@@ -25,7 +26,22 @@ public class Program
             //context.SaveChanges();
 
             //Read (SELECT)
+            var tags = context.Tags.AsNoTracking().ToList();
 
+            foreach(var tag in tags)
+            {
+                Console.WriteLine(tag.Name);
+            }
+
+            //Leitura (SELECT) de dados recomendado usar AsNoTracking
+            // UPDATE e DELETE nunca usar AsNoTracking
+
+            var tag1 = context
+                        .Tags
+                        .AsNoTracking()
+                        .FirstOrDefault(x => x.Id == 5);
+
+            Console.WriteLine(tag1?.Name);
         }
     }
 }
