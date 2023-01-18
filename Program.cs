@@ -1,6 +1,7 @@
 ﻿using BlogEntity.Data;
 using BlogEntity.Models;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
 
 public class Program
@@ -40,17 +41,29 @@ public class Program
         //context.Posts.Add(post);
         //context.SaveChanges();
 
-        var posts = context
+        //var posts = context
+        //            .Posts
+        //            .AsNoTracking()
+        //            .Include(x => x.Author)
+        //            .Include(x => x.Category)
+        //            .OrderBy(x => x.LastUpdateDate)
+        //            .ToList();
+
+        //foreach(var post in posts)
+        //{
+        //    Console.WriteLine($"{post.Title} escrito por {post.Author?.Name} em {post.Category?.Name}");
+        //}
+
+        var post = context
                     .Posts
-                    .AsNoTracking()
+                    //.AsNoTracking()
                     .Include(x => x.Author)
                     .Include(x => x.Category)
-                    .OrderBy(x => x.LastUpdateDate)
-                    .ToList();
+                    .OrderByDescending(x => x.LastUpdateDate)
+                    .FirstOrDefault();
 
-        foreach(var post in posts)
-        {
-            Console.WriteLine($"{post.Title} escrito por {post.Author?.Name} em {post.Category?.Name}");
-        }
+        post.Author.Name = "Teste";
+        context.Posts.Update(post);
+        context.SaveChanges();
     }
 }
