@@ -1,47 +1,56 @@
 ﻿using BlogEntity.Data;
 using BlogEntity.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 public class Program
 {
     public static void Main(string[] args)
     {
-        using(var context = new BlogDataContext())
+        using var context = new BlogDataContext();
+
+        //var user = new User
+        //{
+        //    Name = "Bruno Potrikus",
+        //    Slug = "bruno-potrikus",
+        //    Email = "bruno@email.com",
+        //    Bio = "Estudante Ciência da Computação",
+        //    Image = "https://image",
+        //    PasswordHash = "passwordhash123"
+        //};
+
+        //var category = new Category
+        //{
+        //    Name = "Backend",
+        //    Slug = "backend"
+        //};
+
+        //var post = new Post
+        //{
+        //    Author = user,
+        //    Category = category,
+        //    Body = "<p>Hello World</p>",
+        //    Slug = "estudando-ef-core",
+        //    Summary = "Projeto utilizando EF Core",
+        //    Title = "Estudando EF Core",
+        //    CreateDate = DateTime.Now,
+        //    LastUpdateDate = DateTime.Now
+        //};
+
+        //context.Posts.Add(post);
+        //context.SaveChanges();
+
+        var posts = context
+                    .Posts
+                    .AsNoTracking()
+                    .Include(x => x.Author)
+                    .Include(x => x.Category)
+                    .OrderBy(x => x.LastUpdateDate)
+                    .ToList();
+
+        foreach(var post in posts)
         {
-            //Create (INSERT)
-            //var tag = new Tag { Name="ASP.NET", Slug="aspnet" };
-            //context.Tags.Add(tag);
-            //context.SaveChanges();
-
-            //UPDATE
-            //var tag = context.Tags.FirstOrDefault(x => x.Id == 3);
-            //tag.Name = ".NET";
-            //tag.Slug = "dotnet";
-            //context.Update(tag);
-            //context.SaveChanges();
-
-            //DELETE
-            //var tag = context.Tags.FirstOrDefault(x => x.Id == 3);
-            //context.Remove(tag);
-            //context.SaveChanges();
-
-            //Read (SELECT)
-            var tags = context.Tags.AsNoTracking().ToList();
-
-            foreach(var tag in tags)
-            {
-                Console.WriteLine(tag.Name);
-            }
-
-            //Leitura (SELECT) de dados recomendado usar AsNoTracking
-            // UPDATE e DELETE nunca usar AsNoTracking
-
-            var tag1 = context
-                        .Tags
-                        .AsNoTracking()
-                        .FirstOrDefault(x => x.Id == 5);
-
-            Console.WriteLine(tag1?.Name);
+            Console.WriteLine($"{post.Title} escrito por {post.Author?.Name} em {post.Category?.Name}");
         }
     }
 }
